@@ -1,0 +1,535 @@
+{% extends "base.html" %}
+
+{% block title %}USER ANALYTICS - RafalW3bCraft{% endblock %}
+
+{% block content %}
+<!-- Users Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="mb-0 cyber-title">
+                            <i class="fas fa-users me-2"></i>
+                            USER ANALYTICS MATRIX
+                        </h3>
+                        <p class="mb-0 cyber-subtitle">TELEGRAM USER ENGAGEMENT & PERFORMANCE</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button class="btn cyber-btn-primary" onclick="refreshUsers()">
+                            <i class="fas fa-sync-alt me-1"></i>REFRESH
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Statistics -->
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card cyber-stat-card border-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-user-plus fa-2x cyber-icon-primary mb-2"></i>
+                <div class="cyber-stat-label">NEW USERS</div>
+                <div class="h3 cyber-stat-value" id="new-users-count">--</div>
+                <small class="text-muted">This week</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card cyber-stat-card border-success">
+            <div class="card-body text-center">
+                <i class="fas fa-crown fa-2x cyber-icon-success mb-2"></i>
+                <div class="cyber-stat-label">TOP USER</div>
+                <div class="h3 cyber-stat-value" id="top-user-earnings">--</div>
+                <small class="text-muted">Highest earnings</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card cyber-stat-card border-info">
+            <div class="card-body text-center">
+                <i class="fas fa-mouse-pointer fa-2x cyber-icon-info mb-2"></i>
+                <div class="cyber-stat-label">TOTAL CLICKS</div>
+                <div class="h3 cyber-stat-value" id="total-user-clicks">--</div>
+                <small class="text-muted">All time</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card cyber-stat-card border-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-percentage fa-2x cyber-icon-warning mb-2"></i>
+                <div class="cyber-stat-label">AVG CONVERSION</div>
+                <div class="h3 cyber-stat-value" id="avg-conversion-rate">--</div>
+                <small class="text-muted">Rate</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Charts -->
+<div class="row mb-4">
+    <!-- User Activity Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <h6 class="m-0 cyber-title">USER ACTIVITY TRENDS</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="userActivityChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Region Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <h6 class="m-0 cyber-title">REGION DISTRIBUTION</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="regionChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card cyber-card-glow">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label cyber-stat-label">ACTIVITY PERIOD</label>
+                        <select class="form-select" id="activityFilter" onchange="filterUsers()">
+                            <option value="7">LAST 7 DAYS</option>
+                            <option value="30" selected>LAST 30 DAYS</option>
+                            <option value="90">LAST 90 DAYS</option>
+                            <option value="365">ALL TIME</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label cyber-stat-label">CATEGORY</label>
+                        <select class="form-select" id="categoryFilter" onchange="filterUsers()">
+                            <option value="">ALL CATEGORIES</option>
+                            <option value="Electronics">ELECTRONICS</option>
+                            <option value="Home & Kitchen">HOME & KITCHEN</option>
+                            <option value="Fashion">FASHION</option>
+                            <option value="Sports">SPORTS</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label cyber-stat-label">SORT BY</label>
+                        <select class="form-select" id="sortFilter" onchange="filterUsers()">
+                            <option value="total_earnings">HIGHEST EARNINGS</option>
+                            <option value="total_clicks">MOST CLICKS</option>
+                            <option value="total_conversions">MOST CONVERSIONS</option>
+                            <option value="last_seen">MOST RECENT</option>
+                            <option value="joined_at">NEWEST MEMBER</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label cyber-stat-label">STATUS</label>
+                        <select class="form-select" id="statusFilter" onchange="filterUsers()">
+                            <option value="">ALL USERS</option>
+                            <option value="active">ACTIVE</option>
+                            <option value="new">NEW USERS</option>
+                            <option value="top">TOP PERFORMERS</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="m-0 cyber-title">USER DATABASE</h6>
+                    </div>
+                    <div class="col-auto">
+                        <span class="cyber-badge" id="users-count">-- USERS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table cyber-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>USER</th>
+                                <th>CATEGORY</th>
+                                <th>REGION</th>
+                                <th>CLICKS</th>
+                                <th>CONVERSIONS</th>
+                                <th>EARNINGS</th>
+                                <th>JOINED</th>
+                                <th>LAST SEEN</th>
+                                <th>STATUS</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="10" class="text-center cyber-loading">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>LOADING USER MATRIX...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let allUsers = [];
+let filteredUsers = [];
+let userActivityChart = null;
+let regionChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadUsersData();
+    setInterval(loadUsersData, 120000); // Refresh every 2 minutes
+});
+
+async function loadUsersData() {
+    try {
+        const response = await fetch('/api/users?days=365');
+        if (!response.ok) throw new Error('Failed to load users');
+        
+        allUsers = await response.json();
+        filteredUsers = [...allUsers];
+        
+        updateUserStats();
+        updateUsersTable();
+        updateUserCharts();
+        
+    } catch (error) {
+        console.error('Error loading users:', error);
+        showErrorMessage('Failed to load user data');
+    }
+}
+
+function updateUserStats() {
+    if (!allUsers.length) return;
+    
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const newUsers = allUsers.filter(user => 
+        new Date(user.joined_at) > weekAgo
+    ).length;
+    
+    const topUserEarnings = Math.max(...allUsers.map(u => u.total_earnings));
+    const totalClicks = allUsers.reduce((sum, user) => sum + user.total_clicks, 0);
+    const totalConversions = allUsers.reduce((sum, user) => sum + user.total_conversions, 0);
+    const avgConversionRate = totalClicks > 0 ? (totalConversions / totalClicks * 100) : 0;
+    
+    document.getElementById('new-users-count').textContent = newUsers;
+    document.getElementById('top-user-earnings').textContent = `$${topUserEarnings.toFixed(2)}`;
+    document.getElementById('total-user-clicks').textContent = totalClicks;
+    document.getElementById('avg-conversion-rate').textContent = `${avgConversionRate.toFixed(1)}%`;
+}
+
+function updateUsersTable() {
+    const tableBody = document.getElementById('users-table-body');
+    const usersCount = document.getElementById('users-count');
+    
+    if (!filteredUsers.length) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="10" class="text-center cyber-loading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>NO USERS FOUND
+                </td>
+            </tr>
+        `;
+        usersCount.textContent = '0 USERS';
+        return;
+    }
+    
+    usersCount.textContent = `${filteredUsers.length} USERS`;
+    
+    const rows = filteredUsers.map(user => {
+        const status = getUserStatus(user);
+        const joinedAgo = formatTimeAgo(new Date(user.joined_at));
+        const lastSeenAgo = formatTimeAgo(new Date(user.last_seen));
+        const conversionRate = user.total_clicks > 0 ? 
+            (user.total_conversions / user.total_clicks * 100) : 0;
+        
+        return `
+            <tr class="fade-in">
+                <td>
+                    <div class="fw-bold">${user.first_name} ${user.last_name}</div>
+                    <small class="text-muted">@${user.username || 'No username'}</small>
+                </td>
+                <td>
+                    <span class="badge bg-secondary">${user.category}</span>
+                </td>
+                <td>
+                    <span class="badge bg-info">${user.region}</span>
+                </td>
+                <td class="text-center fw-bold">${user.total_clicks}</td>
+                <td class="text-center fw-bold text-success">${user.total_conversions}</td>
+                <td class="text-center fw-bold text-warning">$${user.total_earnings.toFixed(2)}</td>
+                <td>
+                    <small>${joinedAgo}</small>
+                </td>
+                <td>
+                    <small>${lastSeenAgo}</small>
+                </td>
+                <td>
+                    <span class="badge ${status.class}">${status.text}</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm cyber-btn-primary" onclick="viewUser(${user.user_id})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    tableBody.innerHTML = rows;
+}
+
+function updateUserCharts() {
+    updateUserActivityChart();
+    updateRegionChart();
+}
+
+function updateUserActivityChart() {
+    const ctx = document.getElementById('userActivityChart');
+    if (!ctx) return;
+    
+    if (userActivityChart) {
+        userActivityChart.destroy();
+    }
+    
+    // Generate activity data for last 7 days
+    const labels = [];
+    const clicksData = [];
+    const conversionsData = [];
+    
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+        labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+        
+        // Simulate daily activity (in production, this would come from real data)
+        const baseClicks = Math.floor(Math.random() * 20) + 10;
+        const baseConversions = Math.floor(baseClicks * 0.1);
+        
+        clicksData.push(baseClicks);
+        conversionsData.push(baseConversions);
+    }
+    
+    userActivityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Clicks',
+                    data: clicksData,
+                    borderColor: '#0066ff',
+                    backgroundColor: '#0066ff20',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Conversions',
+                    data: conversionsData,
+                    borderColor: '#00ff66',
+                    backgroundColor: '#00ff6620',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#00ff41',
+                        font: { family: 'Rajdhani', size: 12, weight: '600' }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#00ff41', font: { family: 'Rajdhani' } },
+                    grid: { color: '#00ff4130' }
+                },
+                y: {
+                    ticks: { color: '#00ff41', font: { family: 'Rajdhani' } },
+                    grid: { color: '#00ff4130' }
+                }
+            }
+        }
+    });
+}
+
+function updateRegionChart() {
+    const ctx = document.getElementById('regionChart');
+    if (!ctx) return;
+    
+    if (regionChart) {
+        regionChart.destroy();
+    }
+    
+    // Count users by region
+    const regionCounts = {};
+    allUsers.forEach(user => {
+        regionCounts[user.region] = (regionCounts[user.region] || 0) + 1;
+    });
+    
+    const labels = Object.keys(regionCounts);
+    const data = Object.values(regionCounts);
+    
+    regionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    '#00ff41',
+                    '#0066ff',
+                    '#ff0066',
+                    '#00ff66',
+                    '#ffaa00'
+                ],
+                borderColor: '#0a0a0a',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#00ff41',
+                        font: { family: 'Rajdhani', size: 12, weight: '600' },
+                        padding: 15
+                    }
+                }
+            }
+        }
+    });
+}
+
+function filterUsers() {
+    const days = parseInt(document.getElementById('activityFilter').value);
+    const category = document.getElementById('categoryFilter').value;
+    const sortBy = document.getElementById('sortFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    
+    // Apply filters
+    filteredUsers = allUsers.filter(user => {
+        if (category && user.category !== category) return false;
+        
+        const lastSeenTime = new Date(user.last_seen);
+        const cutoffTime = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+        if (lastSeenTime < cutoffTime) return false;
+        
+        if (status) {
+            const userStatus = getUserStatus(user);
+            if (status === 'new' && userStatus.text !== 'NEW') return false;
+            if (status === 'top' && user.total_earnings < 10) return false;
+            if (status === 'active' && userStatus.text === 'INACTIVE') return false;
+        }
+        
+        return true;
+    });
+    
+    // Apply sorting
+    filteredUsers.sort((a, b) => {
+        switch (sortBy) {
+            case 'total_clicks':
+                return b.total_clicks - a.total_clicks;
+            case 'total_conversions':
+                return b.total_conversions - a.total_conversions;
+            case 'last_seen':
+                return new Date(b.last_seen) - new Date(a.last_seen);
+            case 'joined_at':
+                return new Date(b.joined_at) - new Date(a.joined_at);
+            default: // total_earnings
+                return b.total_earnings - a.total_earnings;
+        }
+    });
+    
+    updateUsersTable();
+}
+
+function getUserStatus(user) {
+    const daysSinceJoined = (Date.now() - new Date(user.joined_at)) / (1000 * 60 * 60 * 24);
+    const daysSinceLastSeen = (Date.now() - new Date(user.last_seen)) / (1000 * 60 * 60 * 24);
+    
+    if (daysSinceJoined < 7) return { text: 'NEW', class: 'bg-primary' };
+    if (user.total_earnings > 20) return { text: 'VIP', class: 'bg-warning' };
+    if (daysSinceLastSeen < 1) return { text: 'ACTIVE', class: 'bg-success' };
+    if (daysSinceLastSeen < 7) return { text: 'REGULAR', class: 'bg-info' };
+    return { text: 'INACTIVE', class: 'bg-secondary' };
+}
+
+function viewUser(userId) {
+    const user = allUsers.find(u => u.user_id == userId);
+    if (!user) return;
+    
+    const conversionRate = user.total_clicks > 0 ? 
+        (user.total_conversions / user.total_clicks * 100) : 0;
+    
+    alert(`User Details:\n\nName: ${user.first_name} ${user.last_name}\nUsername: @${user.username || 'No username'}\nCategory: ${user.category}\nRegion: ${user.region}\nClicks: ${user.total_clicks}\nConversions: ${user.total_conversions}\nEarnings: $${user.total_earnings.toFixed(2)}\nConversion Rate: ${conversionRate.toFixed(1)}%\nJoined: ${new Date(user.joined_at).toLocaleDateString()}\nLast Seen: ${new Date(user.last_seen).toLocaleDateString()}`);
+}
+
+function refreshUsers() {
+    const btn = document.querySelector('[onclick="refreshUsers()"]');
+    const icon = btn.querySelector('i');
+    
+    icon.classList.add('fa-spin');
+    loadUsersData().finally(() => {
+        icon.classList.remove('fa-spin');
+    });
+}
+
+function showErrorMessage(message) {
+    document.getElementById('users-table-body').innerHTML = `
+        <tr>
+            <td colspan="10" class="text-center cyber-loading">
+                <i class="fas fa-exclamation-triangle me-2"></i>${message}
+            </td>
+        </tr>
+    `;
+}
+
+// Utility function
+function formatTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    
+    if (diffDays > 30) return `${Math.floor(diffDays / 30)}mo ago`;
+    if (diffDays > 0) return `${diffDays}d ago`;
+    if (diffHours > 0) return `${diffHours}h ago`;
+    return 'Recently';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CYBER DASHBOARD - RafalW3bCraft{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Cyber CSS -->
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+    
+    {% block head %}{% endblock %}
+</head>
+<body class="cyber-body">
+    <!-- Cyber Matrix Background -->
+    <div class="matrix-bg"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg cyber-navbar fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand cyber-brand" href="/">
+                <i class="fas fa-robot me-2"></i>
+                DEAL BOT MATRIX
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link cyber-nav-link" href="/">
+                            <i class="fas fa-tachometer-alt me-1"></i>DASHBOARD
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cyber-nav-link" href="/deals">
+                            <i class="fas fa-tags me-1"></i>DEALS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cyber-nav-link" href="/users">
+                            <i class="fas fa-users me-1"></i>USERS
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-text cyber-status">
+                    <span class="status-indicator"></span>
+                    SYSTEM ONLINE
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container-fluid cyber-container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

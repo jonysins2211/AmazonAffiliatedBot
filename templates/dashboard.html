@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}CYBER DASHBOARD - DEAL BOT MATRIX - RafalW3bCraft{% endblock %}
+
+{% block content %}
+<!-- System Status Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="mb-0 cyber-title">
+                            <i class="fas fa-robot me-2"></i>
+                            DEAL BOT CONTROL MATRIX
+                        </h3>
+                        <p class="mb-0 cyber-subtitle">REAL-TIME AFFILIATE OPERATIONS STATUS</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button class="btn cyber-btn-primary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt me-1"></i>REFRESH DATA
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="cyber-stat">
+                            <i class="fas fa-satellite-dish me-2"></i>
+                            Channel: <span class="cyber-highlight">@one4all_market</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="cyber-stat">
+                            <i class="fas fa-globe me-2"></i>
+                            Region: <span class="cyber-highlight">GLOBAL</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="cyber-stat">
+                            <i class="fas fa-circle me-2 status-online"></i>
+                            Status: <span class="cyber-highlight">OPERATIONAL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Grid -->
+<div class="row mb-4">
+    <!-- Total Deals -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card cyber-stat-card border-primary">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold cyber-stat-label mb-1">TOTAL DEALS</div>
+                        <div class="h2 mb-0 font-weight-bold cyber-stat-value" id="total-deals">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-database fa-2x cyber-icon-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Users -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card cyber-stat-card border-success">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold cyber-stat-label mb-1">ACTIVE USERS</div>
+                        <div class="h2 mb-0 font-weight-bold cyber-stat-value" id="active-users">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x cyber-icon-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Clicks -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card cyber-stat-card border-info">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold cyber-stat-label mb-1">TOTAL CLICKS</div>
+                        <div class="h2 mb-0 font-weight-bold cyber-stat-value" id="total-clicks">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-mouse-pointer fa-2x cyber-icon-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Earnings -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card cyber-stat-card border-warning">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold cyber-stat-label mb-1">TOTAL EARNINGS</div>
+                        <div class="h2 mb-0 font-weight-bold cyber-stat-value" id="total-earnings">--</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x cyber-icon-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts and Data Grid -->
+<div class="row">
+    <!-- Category Distribution Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <h6 class="m-0 cyber-title">CATEGORY DISTRIBUTION</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="col-lg-6 mb-4">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <h6 class="m-0 cyber-title">PERFORMANCE METRICS</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="cyber-metric">
+                            <div class="cyber-metric-label">CONVERSION RATE</div>
+                            <div class="cyber-metric-value" id="conversion-rate">--%</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="cyber-metric">
+                            <div class="cyber-metric-label">AVG EARNINGS/DEAL</div>
+                            <div class="cyber-metric-value" id="avg-earnings">$--</div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="cyber-divider">
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Deals Matrix -->
+<div class="row">
+    <div class="col-12">
+        <div class="card cyber-card-glow">
+            <div class="card-header cyber-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="m-0 cyber-title">LIVE DEAL MATRIX</h6>
+                    </div>
+                    <div class="col-auto">
+                        <span class="cyber-badge" id="deal-count">-- ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table cyber-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>PRODUCT</th>
+                                <th>PRICE</th>
+                                <th>DISCOUNT</th>
+                                <th>CATEGORY</th>
+                                <th>CLICKS</th>
+                                <th>CONVERSIONS</th>
+                                <th>EARNINGS</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deals-table">
+                            <tr>
+                                <td colspan="8" class="text-center cyber-loading">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>LOADING DEAL MATRIX...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize dashboard on load
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(loadDashboardData, 30000);
+});
+
+function refreshDashboard() {
+    const btn = document.querySelector('[onclick="refreshDashboard()"]');
+    const icon = btn.querySelector('i');
+    
+    icon.classList.add('fa-spin');
+    loadDashboardData().finally(() => {
+        icon.classList.remove('fa-spin');
+    });
+}
+</script>
+{% endblock %}
