@@ -18,9 +18,6 @@ import dotenv
 # Load environment variables
 dotenv.load_dotenv()
 
-# Force correct database configuration
-os.environ['DATABASE_URL'] = "postgresql://neondb_owner:npg_SPJ7cLTg6Eqi@ep-old-king-a83m6v8b-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require"
-os.environ['AMAZON_AFFILIATE_ID'] = "youcanhaveita-21"
 
 from config import Config
 from telegram_bot import AffiliateBot
