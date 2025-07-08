@@ -1,7 +1,9 @@
-requests
+aiohttp
+asyncpg
 beautifulsoup4
 flask
 python-dotenv
-telegram
+requests
 schedule
-asyncpg
+telethon
+python-telegram-bot
