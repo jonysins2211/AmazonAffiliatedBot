@@ -22,4 +22,5 @@ typing-extensions==4.12.1
 urllib3==2.2.1
 werkzeug==3.0.3
 yarl==1.9.4
-from aiogram import types
+from aiogram
+import types
