@@ -4,3 +4,4 @@ flask
 python-dotenv
 telegram
 schedule
+asyncpg
