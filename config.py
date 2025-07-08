@@ -22,14 +22,14 @@ class Config:
         """Initialize configuration from environment variables."""
         # Core API configurations
         self.BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', os.getenv('BOT_TOKEN', ''))
-        self.OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
-        self.DATABASE_URL = os.getenv('DATABASE_URL', '')
+        self.OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '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')
+        self.DATABASE_URL = os.getenv('DATABASE_URL', 'mongodb+srv://primebaby11220:TuGa0I5ZsiC8mp5A@cluster0.df4rivj.mongodb.net/?retryWrites=true&w=majority')
         
         # Amazon affiliate configuration
-        self.AFFILIATE_ID = os.getenv('AMAZON_AFFILIATE_ID', os.getenv('AFFILIATE_ID', 'youcanhaveita-21'))
+        self.AFFILIATE_ID = os.getenv('AMAZON_AFFILIATE_ID', os.getenv('AFFILIATE_ID', 'ironman1122-21'))
         
         # Telegram configuration
-        self.TELEGRAM_CHANNEL = os.getenv('TELEGRAM_CHANNEL', os.getenv('TELEGRAM_CHENNAL', '@one4all_market'))
+        self.TELEGRAM_CHANNEL = os.getenv('TELEGRAM_CHANNEL', os.getenv('TELEGRAM_CHENNAL', '@Amazon_Flipkartt_Offers'))
         
         # Scraping configuration
         self.MAX_DEALS_PER_SOURCE = int(os.getenv('MAX_DEALS_PER_SOURCE', '5'))
@@ -67,10 +67,10 @@ class Config:
         }
         
         # Default region
-        self.DEFAULT_REGION = os.getenv('DEFAULT_REGION', 'US')
+        self.DEFAULT_REGION = os.getenv('DEFAULT_REGION', 'IN')
         
         # Admin user configuration
-        admin_ids_str = os.getenv('ADMIN_USER_IDS', '')
+        admin_ids_str = os.getenv('ADMIN_USER_IDS', '949657126')
         self.ADMIN_USER_IDS = [int(uid.strip()) for uid in admin_ids_str.split(',') if uid.strip().isdigit()] if admin_ids_str else []
         
         # Log configuration status
