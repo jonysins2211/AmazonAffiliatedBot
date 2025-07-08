@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+flask
+python-dotenv
+telegram
+schedule
