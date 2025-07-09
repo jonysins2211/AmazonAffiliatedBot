@@ -27,10 +27,10 @@ class DealScraper:
         
         # Real Amazon deal sources
         self.amazon_sources = [
-            "https://www.amazon.com/gp/goldbox",
-            "https://www.amazon.com/deals",
-            "https://www.amazon.com/s?k=deals&ref=sr_pg_1",
-            "https://www.amazon.com/gp/bestsellers"
+            "https://www.amazon.in/gp/goldbox",
+            "https://www.amazon.in/deals",
+            "https://www.amazon.in/s?k=deals&ref=sr_pg_1",
+            "https://www.amazon.in/gp/bestsellers"
         ]
         
         # Headers to mimic real browser requests with better anti-bot protection
@@ -215,7 +215,7 @@ class DealScraper:
             review_count = self._extract_review_count(review_text) if review_text else 0
             
             # Generate Amazon link
-            amazon_link = f"https://www.amazon.com/dp/{asin}"
+            amazon_link = f"https://www.amazon.in/dp/{asin}"
             
             # Determine category
             category = self._determine_category(title, element)
@@ -368,7 +368,7 @@ class DealScraper:
             logger.info(f"Scraping specific deal from: {url}")
             
             # Validate URL is from Amazon
-            if 'amazon.com' not in url:
+            if 'amazon.in' not in url:
                 logger.warning("URL is not from Amazon")
                 return None
             
@@ -438,7 +438,7 @@ class DealScraper:
                 title="Wireless Bluetooth Headphones - Noise Cancelling",
                 price="$29.99",
                 discount="40% off",
-                link="https://www.amazon.com/dp/B08N5WRWNW",
+                link="https://www.amazon.in/dp/B08N5WRWNW",
                 category="electronics",
                 asin="B08N5WRWNW",
                 description="High-quality wireless headphones with active noise cancellation",
@@ -449,7 +449,7 @@ class DealScraper:
                 title="Smart Home Security Camera 1080p HD",
                 price="$39.95",
                 discount="50% off",
-                link="https://www.amazon.com/dp/B07DGR98VQ",
+                link="https://www.amazon.in/dp/B07DGR98VQ",
                 category="electronics",
                 asin="B07DGR98VQ",
                 description="Indoor security camera with night vision and motion detection",
@@ -460,7 +460,7 @@ class DealScraper:
                 title="Kitchen Stand Mixer 6-Speed",
                 price="$79.99",
                 discount="35% off",
-                link="https://www.amazon.com/dp/B075R2Z1CN",
+                link="https://www.amazon.in/dp/B075R2Z1CN",
                 category="home",
                 asin="B075R2Z1CN",
                 description="Powerful stand mixer for all your baking needs",
