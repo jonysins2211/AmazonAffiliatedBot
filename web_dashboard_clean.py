@@ -429,13 +429,13 @@ def run_production_dashboard():
     app = create_app(config)
     
     logger.info("Starting production web dashboard on http://0.0.0.0:5000")
+    port = int(os.environ.get("PORT", 5000))
     app.run(
         host='0.0.0.0',
-        port=5000,
+        port=port,
         debug=False,
         threaded=True
     )
-
 
 if __name__ == '__main__':
     logging.basicConfig(
