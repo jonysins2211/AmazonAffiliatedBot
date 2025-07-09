@@ -256,12 +256,11 @@ class DealScraper:
             return "Price not available"
         
         # Extract price numbers
-        price_match = re.search(r'[\d,]+\.?\d*', price_text.replace(',', ''))
+        price_match = re.search(r'[\d,]+\.?\d*', price_text)
         if price_match:
-            return f"${price_match.group()}"
+        price = price_match.group().replace(',', '')
+        return f"₹{price}"  # or use "$" if you're working with USD
         
-        return price_text[:50]  # Limit length
-    
     def _clean_discount(self, discount_text: str) -> str:
         """Clean and format discount text."""
         if not discount_text:
