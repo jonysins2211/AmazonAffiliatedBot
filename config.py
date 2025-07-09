@@ -150,10 +150,10 @@ class Config:
                     domain = 'amazon.com.au'
                 elif 'amazon.co.jp' in product_url:
                     domain = 'amazon.co.jp'
-                elif 'amazon.in' in product_url:
-                    domain = 'amazon.in'
+                elif 'amazon.com' in product_url:
+                    domain = 'amazon.com'
                 else:
-                    domain = 'www.amazon.com'  # Default to www.amazon.com for US
+                    domain = 'www.amazon.in'  # Default to www.amazon.com for US
                 
                 return f"https://{domain}/dp/{asin}?tag={affiliate_id}&linkCode=as2&camp=1789&creative=9325"
             
