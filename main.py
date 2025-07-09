@@ -133,9 +133,10 @@ class DealBotApplication:
         try:
             logger.info("🌐 Starting web dashboard only...")
             if self.web_app:
+                port = int(os.environ.get("PORT", self.config.FLASK_PORT))  # ✅ Heroku fix
                 self.web_app.run(
                     host=self.config.FLASK_HOST,
-                    port=self.config.FLASK_PORT,
+                    port=port,
                     debug=False
                 )
             else:
@@ -152,19 +153,16 @@ class DealBotApplication:
         try:
             logger.info("🚀 Starting hybrid mode (bot + web dashboard)...")
             
-            # Start web dashboard in a separate thread with proper initialization
-            import threading
-            import time
-            
             def run_web():
+                import time
                 try:
-                    # Give a moment for the main thread to set up
                     time.sleep(1)
-                    logger.info(f"🌐 Web dashboard thread starting on {self.config.FLASK_HOST}:{self.config.FLASK_PORT}")
+                    port = int(os.environ.get("PORT", self.config.FLASK_PORT))  # ✅ Heroku fix
+                    logger.info(f"🌐 Web dashboard thread starting on {self.config.FLASK_HOST}:{port}")
                     if self.web_app:
                         self.web_app.run(
                             host=self.config.FLASK_HOST,
-                            port=self.config.FLASK_PORT,
+                            port=port,
                             debug=False,
                             use_reloader=False,
                             threaded=True
@@ -175,24 +173,20 @@ class DealBotApplication:
             self.web_thread = threading.Thread(target=run_web, daemon=True)
             self.web_thread.start()
             
-            # Wait a moment for web server to start
             await asyncio.sleep(2)
-            logger.info(f"🌐 Web dashboard should be running on http://{self.config.FLASK_HOST}:{self.config.FLASK_PORT}")
+            port = int(os.environ.get("PORT", self.config.FLASK_PORT))
+            logger.info(f"🌐 Web dashboard should be running on http://{self.config.FLASK_HOST}:{port}")
             
-            # Start task scheduler
             if self.scheduler:
                 scheduler_task = asyncio.create_task(self.scheduler.start())
                 logger.info("⏰ Task scheduler started")
             
-            # Start bot polling
             logger.info("🤖 Starting bot polling...")
             await self.bot.start_polling()
-            
+        
         except Exception as e:
             logger.error(f"❌ Hybrid mode error: {e}")
-    
-
-    
+               
     async def post_deals(self) -> int:
         """Post new deals to Telegram channel with link validation."""
         if not self.bot:
